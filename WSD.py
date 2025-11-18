@@ -3,10 +3,10 @@ from pystardict import Dictionary
 import json
 import re
 
-count=0
 
 def load_dict(ifo_path: str):  return Dictionary(ifo_path)
 
+stardict = Dictionary("./dict/stardict")
 
 def fetch_dictionary_entries(word: str, dictionary) -> list[dict]:
     """
@@ -58,7 +58,6 @@ def split_PoS(word:str, definitions: str)-> dict[str]:
         
         definitions_section = definitions.split(section_pattern)[1:]
         
-        print(len(definitions_section))
         for i, sect in enumerate(definitions_section):
             _ = re.findall(pos_pattern, sect)[0]
 
@@ -66,7 +65,6 @@ def split_PoS(word:str, definitions: str)-> dict[str]:
                 pos.append([DICT_TO_SIMPLE[p] for p in POS_DOBLE[_]])
             else:
                 pos.append(DICT_TO_SIMPLE[_])
-        print(pos) 
         dict_pos = {}
         for i, element in enumerate(pos):
             if type(element)==list:
@@ -79,9 +77,8 @@ def split_PoS(word:str, definitions: str)-> dict[str]:
                     dict_pos[element] = []
                 dict_pos[element].append(definitions_section[i])
         
-        print(json.dumps(dict_pos, indent=4))
 
-        dict_pos = clean_dict_pos(dict_pos)
+        dict_pos = clean_dict_pos(dict_pos,word)
         return dict_pos
     except Exception as e:
         print(f"{e} AT", word)
@@ -89,15 +86,21 @@ def split_PoS(word:str, definitions: str)-> dict[str]:
     return pos
 
 
-def clean_dict_pos(dic):
+def clean_dict_pos(dic,word):
     clean_dict = {}
-    pattern = "<b>(\d+)\.<\/b>\s*(.*?)<\/p>"
-    pattern2 = "][^\d[]*\."
-    
+    pattern_wo_ex = rf"<p>(?:(?!<i).)*?<b[^>]*?>({word.capitalize()}|\d+\.).+?</p>"
+    pattern2 = rf"(?s)<p>(?:(?!<i).)*?<b[^>]*?>({word.capitalize()}|\d+\.).+?</p>"
+    pattern_w_ex = rf"<p>(?:(?!<i)[\s\S])*?<b[^>]*?>(?:{word.capitalize()}|\d+\.)[\s\S]*?</p>(?=\s*<p>\s*<b|$)"
     for k, list_ in dic.items():
         clean_dict[k]=[]
         for text in list_:
-            aceptions = re.findall(pattern, text)
+            response = re.finditer(pattern2, text, re.DOTALL)
+            for i, match in enumerate(response):
+                print("________________")
+                m = match.group(0)
+                m = re.sub(r"<[^>]+>", " ", m)
+                print(m)
+            
             
 
 
@@ -106,7 +109,7 @@ def clean_dict_pos(dic):
 
 if __name__=="__main__":
     our_dict = load_dict("./dict/stardict")
-    word = "abandon"
+    word = "cast"
 
     np = fetch_dictionary_entries(word, our_dict)
     print(np)
