@@ -91,10 +91,13 @@ def split_PoS(word:str, definitions: str)-> dict[str]:
 
 def clean_dict_pos(dic):
     clean_dict = {}
-
+    pattern = "<b>(\d+)\.<\/b>\s*(.*?)<\/p>"
+    pattern2 = "][^\d[]*\."
+    
     for k, list_ in dic.items():
         clean_dict[k]=[]
         for text in list_:
+            aceptions = re.findall(pattern, text)
             
 
 
