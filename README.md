@@ -1,6 +1,6 @@
 # MaoMao Dict koplugin
 
-A lightweight adaptation of the original project, tailored specifically for e-readers running KOReader. This plugin preserves the core functionality of the main project: retrieving word definitions based on their surrounding context to improve reading flow and comprehension.
+A lightweight adaptation of the [original project](https://github.com/MaoMao-Corp/MaoMao-Dict), tailored specifically for e-readers running KOReader. This plugin preserves the core functionality of the main project: retrieving word definitions based on their surrounding context to improve reading flow and comprehension.
 
 Because KOReader does not support Python out of the box, this version introduces an additional challenge. The entire logic must be refactored and re-implemented in Lua, KOReader’s native extension language. 
 
