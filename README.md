@@ -1,4 +1,4 @@
-# Dict v.E-reader
+# MaoMao Dict koplugin
 
 A lightweight adaptation of the original project, tailored specifically for e-readers running KOReader. This plugin preserves the core functionality of the main project: retrieving word definitions based on their surrounding context to improve reading flow and comprehension.
 
